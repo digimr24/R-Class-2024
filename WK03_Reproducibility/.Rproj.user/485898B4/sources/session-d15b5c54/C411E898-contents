@@ -1,0 +1,57 @@
+---
+title: "Week 3 Lab Markdown"
+author: "Madison DiGirolamo"
+date: "9/11/2024"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include= TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_knit$set(root.dir = "C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility")
+```
+
+
+
+
+#Creating the directory structure by adding folders
+
+```{r}
+if (!file.exists('data')) dir.create('data') #creates the file because it does not exist in the location
+if (!file.exists('src')) dir.create('src')
+if (!file.exists('analysis')) dir.create('analysis')
+if (!file.exists('figures')) dir.create('figures')
+if (!file.exists('report')) dir.create('report')
+```
+
+I created a script called "driver.R" in the src folder and a second script called "EditDataframe.R" in src. 
+
+```{r}
+read.csv("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility/data/tempExperiment-raw.csv")
+
+```
+
+#Checkpoint 1
+In the temperature column there are multiple formats that were used to indicate which population each sample is from. This is not ready for analysis because these need to be uniform to actually allow the system to identify each sample as the right population. 
+
+
+#Checkpoint 2
+
+I was able to fix all of the issues with levels in the temp and pop cloumns. 
+
+
+
+#Checkpoint 3 
+We separated the editing of the data frame to be a separate script to streamline the driver. This means that if someone opens just the driver they would need to run everything that happened in the editing of the data frame. The "source" line at the beginning of driver.R does this, simultaneously streamlining the driver script but ensuring repeatability. 
+
+
+#Checkpoint 4
+Each test is checking how the factor impacts growth rate. Neither temp or population significantly impacts growth rate. Additionally, temp and population combined does not significantly impact growth rate. ( All P-Values are high)
+
+#Checkpoint 5
+The organization system and steps we used is easy to follow and reproduce because the driver shows the chronology and all steps are annotated and included in the other scripts. If someone opened this project, along with the associated initial CSV file, they could produce the exact same statistical analysis and figures. 
+
+
+#Checkpoint 6

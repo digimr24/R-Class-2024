@@ -1,0 +1,11 @@
+#set wd
+setwd("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility")
+
+source("src/EditDataframe.R") #this reads in the information and data frames created in EditDataframe.R
+
+# analysis
+source("src/Analysis.R")
+
+
+
+

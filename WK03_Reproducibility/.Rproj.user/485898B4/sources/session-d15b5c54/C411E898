@@ -1,0 +1,29 @@
+{
+    "id": "C411E898",
+    "path": "~/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility/src/Madison Week 3 Lab.Rmd",
+    "project_path": "src/Madison Week 3 Lab.Rmd",
+    "type": "r_markdown",
+    "hash": "1810464385",
+    "contents": "",
+    "dirty": false,
+    "created": 1726426549451.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "tempName": "Untitled2",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "53,321",
+        "scrollLine": "47",
+        "last_setup_crc32": "d15b5c54f3f0c5bd",
+        "working_dir": "current"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1726435869,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1726435869736,
+    "read_only": false,
+    "read_only_alternatives": []
+}
