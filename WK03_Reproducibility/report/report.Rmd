@@ -3,28 +3,208 @@ title: "report"
 author: "Madison DiGirolamo"
 date: '2024-09-15'
 output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include= TRUE}
 knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_knit$set(root.dir = "C:/Users/madid/OneDrive/Documents/Desktop/RCour
+                     seExamples/R-Class-2024/WK03_Reproducibility")
 ```
 
-## R Markdown
+## Creating the directory structure by adding folders
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+if (!file.exists('data')) dir.create('data') #creates the file because 
+#it does not exist in the location
+if (!file.exists('src')) dir.create('src')
+if (!file.exists('analysis')) dir.create('analysis')
+if (!file.exists('figures')) dir.create('figures')
+if (!file.exists('report')) dir.create('report')
 ```
 
-## Including Plots
+I created a script called "driver.R" in the src folder and a second
+script called "EditDataframe.R" in src.
 
-You can also embed plots, for example:
+```{r}
+read.csv("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024
+         /WK03_Reproducibility/data/tempExperiment-raw.csv")
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# Code from EditDataFrame.R Script
+
+```{r}
+#creates the data frame by reading the csv file
+df.t1 <- read.csv("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/
+                  R-Class-2024/WK03_Reproducibility/data/tempExperiment-raw.csv")
+
+#separate temperature treatment from population using strsplit
+#the unlist and matrix functions rearrange the output of strsplit
+a <- strsplit(as.character(df.t1$temp), split = '-') 
+#as.character indicates that it is a character
+newvar <- matrix(unlist(a), ncol =2, byrow = TRUE) 
+# takes apart the temp and population and creates a matrix of two colums
+head(newvar)# view the new table created
+
+
+#creating new data frame
+df.t2 <- df.t1
+df.t2$temp <- newvar[,1]
+#assigns column 1 of the newvar matrix to the temp column on the new data frame
+df.t2$pop <- newvar[,2]
+# assigns column 2 of the newvar matrix to a new population column
+
+head(df.t2) #view new df
+
+#now I have the correct columns that I want, but within those columns the
+#formats differ in temp it is numeric (10) or the word ten, pop is pop or
+#population
+#need to make them uniform because they are different levels
+
+df.t2$temp <- sub('ten', '10', df.t2$temp)
+df.t2$temp <- sub('twenty', '20', df.t2$temp)
+df.t2$pop <- sub('population', 'pop', df.t2$pop)
+df.t2$pop <- sub('pop 1','pop1', df.t2$pop)
+df.t2$pop <- sub('pop2','pop 2', df.t2$pop)
+df.t2$pop <- sub('population 1','pop 1', df.t2$pop)
+str(df.t2) #look at structure, found temp to be a character and population to 
+#be a character
+# need to change these to be factors instead of characters 
+
+
+
+df.t2$temp <- factor(df.t2$temp) #changes temp to be a factor
+df.t2$pop <- factor(df.t2$pop) #changes pop to be a factor
+str(df.t2)#looking at new structure to confirm chr changed to factor
+write.csv(df.t2, 'data/tempExperiment_V2.csv') # save new df as a csv
+
+
+```
+
+## Checkpoint 1
+
+In the temperature column there are multiple formats that were used to
+indicate which population each sample is from. This is not ready for
+analysis because these need to be uniform to actually allow the system
+to identify each sample as the right population.
+
+## Checkpoint 2
+
+I was able to fix all of the issues with levels in the temp and pop
+columns.
+
+## Creating the Driver
+
+At this step I created a new script called driver.R. All code included
+in the driver is below under "Driver Code"
+
+## Checkpoint 3
+
+We separated the editing of the data frame to be a separate script to
+streamline the driver. This means that if someone opens just the driver
+they would need to run everything that happened in the editing of the
+data frame. The "source" line at the beginning of driver.R does this,
+simultaneously streamlining the driver script but ensuring
+repeatability.
+
+# Code for Analysis script
+
+I created a new script called Analysis, stored in src, that holds all of
+the figures and ANOVA analysis.
+
+```{r}
+
+setwd("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility")
+source("src/EditDataframe.R")
+#clearing list
+rm(list = ls(all= TRUE))
+#reads in CSV of edited data frame
+df.t <- read.csv("data/tempExperiment_V2.csv")
+str(df.t) #investigate structure
+
+#I need to change temperature and population to be factors
+df.t$temp <- factor(df.t$temp)
+df.t$pop <- factor(df.t$pop)
+
+#how does temp, population, and size affect growth rate?
+#visualizing the data
+
+boxplot(df.t$growthRate ~ df.t$temp + df.t$pop) 
+
+#boxplot version 2
+boxplot(df.t$growthRate ~ df.t$temp + df.t$pop,
+        names = c('10', '20', '10', '20'), #renaming the labels
+        at = c(1,2,4,5),
+        ylab = 'Growth rate mm/day',
+        xlab = '')
+
+#using mtext to add margin text
+mtext('Pop 1', side = 1, at =1.5, line =3)
+mtext( 'Pop 2', side = 1, at = 4.5, line =3)
+
+pdf('figures/MyBoxplot.pdf', width = 5, height = 5)
+
+boxplot(df.t$growthRate ~ df.t$temp + df.t$pop,
+        names = c('10', '20', '10', '20'), #Temperature label
+        at = c(1, 2, 4, 5), # space out the boxes according to population
+        ylab = 'Growth rate mm/day',
+        xlab = ''
+)
+# Introducing the 'mtext' command to add margin text
+mtext('Pop 1', side = 1, at = 1.5, line = 3)
+mtext('Pop 2', side = 1, at = 4.5, line = 3)
+dev.off()
+
+#ANOVA analysis
+m1 <- aov(df.t$growthRate ~ df.t$temp * df.t$pop)
+m1.summary <- summary(m1)
+m1.summary #view the summary
+
+saveRDS(m1.summary, 'analysis/m1.summary.rds') #saves summary of ANOVA test to 
+#analysis folder
+
+
+```
+
+## Checkpoint 4
+
+Each test is checking how the factor impacts growth rate. Neither temp
+or population significantly impacts growth rate. Additionally, temp and
+population combined does not significantly impact growth rate. ( All
+P-Values are high)
+
+# Driver Code
+
+```{r}
+
+setwd("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/
+      WK03_Reproducibility")
+
+source("src/EditDataframe.R") #this reads in the information and data frames 
+    #created in EditDataframe.R
+
+source("src/Analysis.R") # reads in the analysis script
+
+
+```
+
+## Checkpoint 5
+
+The organization system and steps we used is easy to follow and
+reproduce because the driver shows the chronology and all steps are
+annotated and included in the other scripts. If someone opened this
+project, along with the associated initial CSV file, they could produce
+the exact same statistical analysis and figures.
+
+## Checkpoint 6
+
+This markdown file will knit to pdf.
+
+## Checkpoint 7
+
+
+## Checkpoint 8

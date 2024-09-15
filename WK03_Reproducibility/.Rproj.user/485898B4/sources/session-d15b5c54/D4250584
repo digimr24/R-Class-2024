@@ -3,7 +3,7 @@
     "path": "~/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility/report/report.Rmd",
     "project_path": "report/report.Rmd",
     "type": "r_markdown",
-    "hash": "2155272128",
+    "hash": "0",
     "contents": "",
     "dirty": true,
     "created": 1726435063220.0,
@@ -13,15 +13,20 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "15,0",
-        "scrollLine": "4"
+        "cursorPosition": "211,35",
+        "scrollLine": "182",
+        "rmdVisualMode": "false",
+        "rmdVisualCollapsedChunks": "",
+        "rmdVisualModeLocation": "6228:3354.999755859375",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1"
     },
     "folds": "",
-    "lastKnownWriteTime": 1726435491,
+    "lastKnownWriteTime": 1726439832,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1726435718540,
+    "last_content_update": 1726439924017,
     "read_only": false,
     "read_only_alternatives": []
 }
