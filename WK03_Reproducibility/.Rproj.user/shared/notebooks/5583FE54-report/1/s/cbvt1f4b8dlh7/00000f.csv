@@ -1,0 +1,10 @@
+"0","read.csv(""C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024"
+"0","         /WK03_Reproducibility/data/tempExperiment-raw.csv"")"
+"2","Warning in file(file, ""rt"") :"
+"2","
+ "
+"2"," cannot open file 'C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024
+         /WK03_Reproducibility/data/tempExperiment-raw.csv': Invalid argument
+"
+"2","Error in file(file, ""rt"") : cannot open the connection
+"

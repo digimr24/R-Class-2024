@@ -29,18 +29,14 @@ if (!file.exists('report')) dir.create('report')
 I created a script called "driver.R" in the src folder and a second
 script called "EditDataframe.R" in src.
 
-```{r}
-read.csv("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024
-         /WK03_Reproducibility/data/tempExperiment-raw.csv")
-
-```
-
 # Code from EditDataFrame.R Script
 
 ```{r}
 #creates the data frame by reading the csv file
-df.t1 <- read.csv("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/
-                  R-Class-2024/WK03_Reproducibility/data/tempExperiment-raw.csv")
+setwd("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility")
+read.csv("data/tempExperiment-raw.csv")
+
+df.t1 <- read.csv("data/tempExperiment-raw.csv")
 
 #separate temperature treatment from population using strsplit
 #the unlist and matrix functions rearrange the output of strsplit
@@ -180,9 +176,8 @@ P-Values are high)
 # Driver Code
 
 ```{r}
+setwd("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility")
 
-setwd("C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/
-      WK03_Reproducibility")
 
 source("src/EditDataframe.R") #this reads in the information and data frames 
     #created in EditDataframe.R
@@ -205,6 +200,11 @@ the exact same statistical analysis and figures.
 This markdown file will knit to pdf.
 
 ## Checkpoint 7
+
+I changed a data point in the EditDataFrame section of a new markdown and ran
+the whole exact markdown again successfully. The analysis produced slightly 
+different numbers. The alternate markdown is called report7.rmd in the report 
+folder with this document. 
 
 
 ## Checkpoint 8

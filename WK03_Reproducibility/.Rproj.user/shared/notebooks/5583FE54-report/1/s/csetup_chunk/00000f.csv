@@ -1,0 +1,4 @@
+"0","knitr::opts_chunk$set(echo = TRUE)"
+"0",""
+"0","knitr::opts_knit$set(root.dir = ""C:/Users/madid/OneDrive/Documents/Desktop/RCour"
+"0","                     seExamples/R-Class-2024/WK03_Reproducibility"")"

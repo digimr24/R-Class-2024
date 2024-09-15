@@ -1,0 +1,7 @@
+"0",""
+"0","boxplot(df.t$growthRate ~ df.t$temp + df.t$pop,"
+"0","        names = c('10', '20', '10', '20'), #Temperature label"
+"0","        at = c(1, 2, 4, 5), # space out the boxes according to population"
+"0","        ylab = 'Growth rate mm/day',"
+"0","        xlab = ''"
+"0",")"

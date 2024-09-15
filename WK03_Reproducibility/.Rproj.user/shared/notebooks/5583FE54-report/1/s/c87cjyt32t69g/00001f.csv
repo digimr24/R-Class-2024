@@ -1,0 +1,6 @@
+"0","#creates the data frame by reading the csv file"
+"0","setwd(""C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility"")"
+"2","Warning:"
+"2"," The working directory was changed to C:/Users/madid/OneDrive/Documents/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility inside a notebook chunk. The working directory will be reset when the chunk is finished running. Use the knitr root.dir option in the setup chunk to change the working directory for notebook chunks.
+"
+"0","read.csv(""data/tempExperiment-raw.csv"")"

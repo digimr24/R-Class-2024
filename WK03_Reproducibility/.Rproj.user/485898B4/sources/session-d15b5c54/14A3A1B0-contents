@@ -1,12 +1,13 @@
 ---
-title: "report"
+title: "report v2"
 author: "Madison DiGirolamo"
 date: '2024-09-15'
 output: html_document
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
+
+# This version of the report addresses Checkpoint 7
+A single data point is changed at line 80/81
+
 
 ```{r setup, include= TRUE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -76,10 +77,15 @@ str(df.t2) #look at structure, found temp to be a character and population to
 df.t2$temp <- factor(df.t2$temp) #changes temp to be a factor
 df.t2$pop <- factor(df.t2$pop) #changes pop to be a factor
 str(df.t2)#looking at new structure to confirm chr changed to factor
+
+#Changing a single data point
+df.t2[7,2]= 90.0
+
 write.csv(df.t2, 'data/tempExperiment_V2.csv') # save new df as a csv
 
 
 ```
+
 
 ## Checkpoint 1
 
@@ -187,6 +193,7 @@ source("src/Analysis.R") # reads in the analysis script
 
 ```
 
+
 ## Checkpoint 5
 
 The organization system and steps we used is easy to follow and
@@ -201,10 +208,6 @@ This markdown file will knit to pdf.
 
 ## Checkpoint 7
 
-I changed a data point in the EditDataFrame section of a new markdown and ran
-the whole exact markdown again successfully. The analysis produced slightly 
-different numbers. The alternate markdown is called report7.rmd in the report 
-folder with this document. 
 
 
 ## Checkpoint 8
