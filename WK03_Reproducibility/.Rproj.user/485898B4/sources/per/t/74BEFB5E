@@ -3,9 +3,9 @@
     "path": "~/Desktop/RCourseExamples/R-Class-2024/WK03_Reproducibility/src/driver.R",
     "project_path": "src/driver.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "169924586",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1726426546811.0,
     "source_on_save": false,
     "relative_order": 2,
@@ -17,11 +17,11 @@
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1726079796,
+    "lastKnownWriteTime": 1726441281,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1726439534442,
+    "last_content_update": 1726441281561,
     "read_only": false,
     "read_only_alternatives": []
 }

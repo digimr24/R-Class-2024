@@ -1,0 +1,302 @@
+---
+title: "Week 4 Lab"
+author: "Madison DiGirolamo"
+date: "9/18/2024"
+output: html_document
+---
+
+
+```{r}
+library(knitr)
+opts_knit$set(root.dir = "C:/Users/madid/OneDrive/Documents/Desktop/RCour
+                     seExamples/R-Class-2024/WK04_Bootstrapping")
+
+
+```
+
+Goals of Lab 4: + review SD, SE, confidence intervals + for() loops + build boostrap function
+
+```{r}
+x <- rnorm(1000)
+#modeling with normal distribution and 1000 observations
+hist(x, freq= FALSE, # makes the y-axis density
+    ylim = c(0,2), #y-axis scale
+    xlim = c(-4,4),#x-axis scale
+    main = "1000 observations") #title
+
+
+mean.x <- replicate(1000, mean(rnorm(1000)))
+#find the mean of the distribution, 1000 times
+#add the distribution of th emean to the histogram
+hist(mean.x, add =TRUE,
+     col = "blue", #color of plot to blue
+     freq = FALSE) #to make y-axis density
+
+
+```
+
+# Checkpoint 1 (1000 obs)
+
+-   what is the region where 95% of the data points lie?
+
+```{r}
+s1 <- sd(x) #SD
+s1
+a1 <- c(-1,1)*1.96*s1 + mean(x) 
+a1 #95% CI for where the data points lie
+
+```
+
+what is the region where there is a 95% chance the mean of the population exists?
+
+```{r}
+SE1 <- (s1/sqrt(1000))
+SE1
+
+b1 <- mean(x) + c(-1,1)*1.96*SE1
+b1 #95% CI for where the mean of the population exists
+
+```
+
+The region for the 95% chance of where the mean exists is smaller than the 95% region for where all of the data exists. Looking back at the histogram, area in blue is much narrower than the data
+
+Recreate the same plots but with only 25 observations.
+
+```{r}
+x <- rnorm(25)
+hist(x,
+     freq = FALSE,
+     ylim = c(0,2),
+     xlim = c(-4,4),
+     main = "25 observations")
+
+mean.x <- replicate(1000, mean(rnorm(25)))
+hist(mean.x, add = TRUE, # adds to the preexisting plot
+     col = "blue",
+     freq = FALSE)
+```
+
+# Checkpoint 2
+
+What is the region where 95% of the data points lie? This is a larger region than with 1000 observations.
+
+```{r}
+s2 <- sd(x)
+s2
+a2 <- c(-1,1)*1.96*s2 + mean(x)
+a2
+
+```
+
+What is the region where there is a 95% chance that the mean of the population exists (25 observations)? This is also less narrow than with 1000 observations because with less observations we can not be as certain.
+
+```{r}
+SE2 <- (s2/sqrt(25))
+SE2
+
+b2 <- mean(x) + c(-1,1)*1.96*SE2
+b2
+
+```
+
+End of Checkpoint 2:
+
+Some of this is answered above but for both the 95% CI for the data and the 95% CI for the mean, the CI is larger when there are less observations.
+
+# Creating For Loop Function
+
+```{r}
+My.CI <- function(x.vect){
+# x.vect should be normally distributed
+sd.x <- sd(x.vect)
+n <- length(x.vect)
+se.x <- sd.x/sqrt(n)
+data.95.CI <- mean(x.vect)+1.96*c(-1,1)*sd.x
+
+mean.95.CI <- mean(x.vect)+1.96*c(-1,1)*se.x
+
+return(list(sd=sd.x, se=se.x, mean= mean(x.vect),
+data.95 = data.95.CI,
+mean.95 = mean.95.CI))
+}
+
+My.CI(x) #where x is 25 observations
+
+```
+
+The function above assumes normal distribution, but what do you when your data
+does not fit a normal distribution? You can bootstrap, which resamples the data
+to create a sampling distribution.
+
+```{r}
+my.output <- c()#empty vector to store output
+my.input <- seq(53, 128, by=5) #sequence we will use to calculate output
+
+for (i in 1:length(my.input)){my.output[i] <- my.input[i]^2 + my.input[i]}
+
+my.output
+
+```
+
+```{r}
+my.input
+
+```
+
+```{r}
+sample(my.input, replace = TRUE) #samples the vector with replacement
+
+```
+
+My.input and the sample form my.input with replacement are not the same.
+
+```{r}
+# I already used s1 so here I use s10 instead
+#resample the two groups 100 times with different probabilities (prob line)
+s10 <- sample(c("Group 1", "Group 2"), 
+              size = 100, 
+              replace = TRUE,
+              prob = c(0.3,0.7))
+table(s10)
+
+```
+
+For the next example we are using fish growth data-- fish growth rate (mm/year) as a function of temp (C)
+
+```{r}
+#reading csv file
+fish.df <- read.csv("FishGrowthTemp.csv", header=TRUE)
+#creating a plot of the data
+par(mfrow=c(1,1))
+plot(fish.df$temp, fish.df$growth.rate,
+     xlab ="Temp (C)",
+     ylab = "Growth Rate (mm/y)")
+abline(lm(fish.df$growth.rate~fish.df$temp)) #adds line
+
+```
+
+```{r}
+#checking if the data looks like it follows a normal distribution using both
+#a histogram and a qqplot
+
+#histogram
+hist(lm(fish.df$growth.rate~fish.df$temp)$residuals,
+     xlab = "Growth Rate (mm/y)")
+
+#qqplot
+qqnorm(fish.df$growth.rate)
+qqline(fish.df$growth.rate)
+```
+
+```{r}
+lm(fish.df$growth.rate~fish.df$temp)$coef
+#checking for intercept and slope
+```
+
+```{r}
+summary(lm(fish.df$growth.rate~ fish.df$temp))
+
+```
+
+# Checkpoint 3
+
+Although it looks like there is a positive relationship based on the qqplot, it
+does not seem to follow a normal distribution and so the t-tests done with the
+summary function should not be trusted, even though we still could find
+a significant relationship/slope greater than 0 using another distribution or a 
+bootstrap.
+
+Using a bootstrap to see if slope is different than 0 by resampling 100 times.
+
+```{r}
+n.boot <- 1000
+
+#fill with
+slope <- rep(NA, n.boot)
+n.rows <- nrow(fish.df)
+#create slopes
+for (i in 1:n.boot){
+  new.rows <- sample(1:n.rows, replace =TRUE)
+  new.data <- fish.df[new.rows,]
+  slope[i] <- lm(new.data$growth.rate ~ new.data$temp)$coef[2]
+}
+
+#histogram of slopes
+hist(slope, breaks = 100)
+
+```
+
+```{r}
+sort(slope)[n.boot*0.025] #lower 95% CI
+sort(slope)[n.boot*0.975] #upper95% CI
+```
+
+# Checkpoint 4 
+When using the bootstrap method, we see it is possible still that the slope 
+could be zero. It is far to one side of the CI, but still possible. Adding more 
+bootstraps in theory increases the power of the test, but the result would 
+be negligible here because we are already having it do such a high amount. 
+Looking at SE in a bootstrap example would be useless because SE is based on 
+the normal distribution, and bootstraps are used when the data does not fit
+a normal distribution, but you can look at a 95% CI of the mean. 
+
+
+# Really Non-normal Example
+
+```{r}
+n = 100000
+set.seed(1)
+x1 <- rpois(n/2, 2)
+x2 <- rpois(n/2, 19)
+
+data <- c(x1, -x2)
+hist(data, xlab = "x", main = "Really Non-normal data")
+```
+
+The data is very obviously not normal.
+
+```{r}
+mean(data) #mean of the data, not sample mean
+```
+
+```{r}
+#sample mean
+set.seed(1)
+my.sample <- sample(data, 30, replace = TRUE)
+mean(my.sample)
+
+```
+
+```{r}
+se <- sd(my.sample)/sqrt(length(my.sample))
+mean.95 <- mean(my.sample) + 1.96*c(-1,1)*se
+print(mean.95)
+
+```
+
+The 95% confidence interval includes the true mean.
+
+
+Sampling Distribution of the Mean
+```{r}
+n.boot <- 10000
+mean.est <- rep(NA, n.boot)
+
+for (i in 1:n.boot){
+  my.sample <- sample(data,30, replace = TRUE)
+  mean.est[i] <- mean(my.sample)
+}
+
+```
+
+```{r}
+hist(mean.est, xlab = "Sample Means")
+sort(mean.est)[n.boot*0.025] #lower
+sort(mean.est)[n.boot*0.975] #upper CI on distribution
+abline(v = c(sort(mean.est)[n.boot*0.025], sort(mean.est)[n.boot*0.975]),
+             lty =2,
+             col = "red")
+
+```
+Even for highly non-normal data, the sampling distribution of the mean is 
+normal!

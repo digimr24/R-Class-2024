@@ -2,9 +2,11 @@
 title: "report"
 author: "Madison DiGirolamo"
 date: '2024-09-15'
-output: html_document
-editor_options: 
-  markdown: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
     wrap: 72
 ---
 
